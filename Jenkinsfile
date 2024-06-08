@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         DOCKER_COMPOSE_FILE = 'docker-compose.prod.local.yml'
-        WORKSPACE_DIR = '/var/jenkins_home/workspace/lmnad-jenkins' // Путь к вашей рабочей директории
     }
 
     stages {
@@ -38,7 +37,7 @@ pipeline {
             steps {
                 script {
                     // Запуск docker-compose с использованием файла .env для сборки и запуска контейнеров
-                    sh "docker-compose -f ${WORKSPACE_DIR}/${DOCKER_COMPOSE_FILE} up -d --build"
+                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --build"
                 }
             }
         }
