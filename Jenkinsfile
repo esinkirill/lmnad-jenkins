@@ -12,6 +12,15 @@ pipeline {
             }
         }
 
+        stage('Copy .env file') {
+            steps {
+                script {
+                    // Копируем файл .env из склонированного репозитория в рабочую директорию
+                    sh 'cp lmnad-jenkins/.env .'
+                }
+            }
+        }
+
         stage('Build and Deploy') {
             steps {
                 script {
