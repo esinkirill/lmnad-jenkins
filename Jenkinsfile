@@ -3,33 +3,23 @@ pipeline {
 
     environment {
         DOCKER_COMPOSE_FILE = 'docker-compose.prod.local.yml'
+        DJANGO_SECRET_KEY = 'prod_local'
+        DJANGO_SETTINGS_MODULE = 'project.settings.server'
+        DB_HOST = 'db'
+        DB_USER = 'lmnad_prod_local'
+        DB_PASSWORD = '12345'
+        CELERY_BROKER_URL = 'amqp://guest:guest@broker:5672'
+        CELERY_RESULT_BACKEND = 'rpc://'
+        MYSQL_ROOT_HOST = '%'
+        MYSQL_ROOT_PASSWORD = '78910'
+        YANDEX_TRANSLATE_API_KEY = 'local'
+        GEOPOSITION_GOOGLE_MAPS_API_KEY = 'local'
     }
 
     stages {
         stage('Clone Repository') {
             steps {
                 git 'https://github.com/esinkirill/lmnad-jenkins'
-            }
-        }
-
-        stage('Copy .env file') {
-            steps {
-                script {
-                    sh "mkdir -p ${WORKSPACE_DIR}" // Создаем рабочую директорию, если ее еще нет
-                    sh 'echo "DJANGO_SECRET_KEY=prod_local" > ${WORKSPACE_DIR}/.env'
-                    sh 'echo "DJANGO_SETTINGS_MODULE=project.settings.server" >> ${WORKSPACE_DIR}/.env'
-                    sh 'echo "DB_HOST=db" >> ${WORKSPACE_DIR}/.env'
-                    sh 'echo "DB_USER=lmnad_prod_local" >> ${WORKSPACE_DIR}/.env'
-                    sh 'echo "DB_PASSWORD=12345" >> ${WORKSPACE_DIR}/.env'
-                    sh 'echo "CELERY_BROKER_URL=amqp://guest:guest@broker:5672" >> ${WORKSPACE_DIR}/.env'
-                    sh 'echo "CELERY_RESULT_BACKEND=rpc://" >> ${WORKSPACE_DIR}/.env'
-                    sh 'echo "" >> ${WORKSPACE_DIR}/.env' // Пустая строка между группами переменных
-                    sh 'echo "MYSQL_ROOT_HOST=%" >> ${WORKSPACE_DIR}/.env'
-                    sh 'echo "MYSQL_ROOT_PASSWORD=78910" >> ${WORKSPACE_DIR}/.env'
-                    sh 'echo "" >> ${WORKSPACE_DIR}/.env' // Пустая строка между группами переменных
-                    sh 'echo "YANDEX_TRANSLATE_API_KEY=local" >> ${WORKSPACE_DIR}/.env'
-                    sh 'echo "GEOPOSITION_GOOGLE_MAPS_API_KEY=local" >> ${WORKSPACE_DIR}/.env'
-                }
             }
         }
 
