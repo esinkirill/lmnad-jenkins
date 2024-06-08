@@ -2,7 +2,7 @@ version: '3'
 
 services:
   django_test:
-    image: lmnad_base
+    image: lmnad_base_test
     container_name: lmnad_web_test
     build:
       context: .
@@ -31,7 +31,7 @@ services:
     container_name: lmnad_mysql_test
     image: mysql:5.7
     environment:
-      - MYSQL_DATABASE=lmnad_db
+      - MYSQL_DATABASE=lmnad_db_test
       - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_USER=${DB_USER}
@@ -46,7 +46,7 @@ services:
       - lmnad_net_test
 
   nginx_test:
-    image: lmnad_nginx
+    image: lmnad_nginx_test
     container_name: lmnad_nginx_test
     build:
       context: ./docker/nginx_local
@@ -63,7 +63,7 @@ services:
       - lmnad_net_test
 
   celery_test:
-    image: lmnad_base
+    image: lmnad_base_test
     build:
       context: .
     container_name: lmnad_celery_test
