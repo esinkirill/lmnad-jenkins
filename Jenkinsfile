@@ -16,14 +16,16 @@ pipeline {
             }
         }
 
-        stage('Copy .env file') {
-            steps {
-                // Копируем файл .env с удаленного хоста в рабочую директорию Jenkins
-                script {
-                    sh "ssh ${REMOTE_USER}@${REMOTE_HOST} 'cat ${ENV_FILE_PATH}' > .env"
-                }
+    stage('Copy .env file') {
+        steps {
+            script {
+                // Копируем файл .env с удаленного хоста в папку проекта lmnad-jenkins
+                sh "scp ${REMOTE_USER}@${REMOTE_HOST}:${ENV_FILE_PATH} /var/jenkins_home/workspace/lmnad-jenkins/.env"
             }
         }
+    }
+
+
 
         stage('Build and Deploy') {
             steps {
