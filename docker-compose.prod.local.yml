@@ -1,12 +1,12 @@
 version: '3'
 
 services:
-  django:
+  django_test:
     image: lmnad_base
-    container_name: lmnad_web
+    container_name: lmnad_web_test
     build:
       context: .
-    command: sh -c "wait-for db:3306 && /lmnad/run_app.sh"
+    command: sh -c "wait-for db_test:3306 && /lmnad/run_app.sh"
     environment:
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
       - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
@@ -18,57 +18,57 @@ services:
       - YANDEX_TRANSLATE_API_KEY=${YANDEX_TRANSLATE_API_KEY}
       - GEOPOSITION_GOOGLE_MAPS_API_KEY=${GEOPOSITION_GOOGLE_MAPS_API_KEY}
     depends_on:
-      - db
+      - db_test
     restart: always
     tty: true
     volumes:
       - static_data:/lmnad/project/static
       - media_data:/lmnad/project/media
     networks:
-      - lmnad_net
+      - lmnad_net_test
 
-  db:
-    container_name: lmnad_mysql
+  db_test:
+    container_name: lmnad_mysql_test
     image: mysql:5.7
     environment:
-      - MYSQL_DATABASE=lmnad_db
+      - MYSQL_DATABASE=lmnad_db_test
       - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${DB_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     restart: always
     command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
     networks:
-      - lmnad_net
+      - lmnad_net_test
 
-  nginx:
+  nginx_test:
     image: lmnad_nginx
-    container_name: lmnad_nginx
+    container_name: lmnad_nginx_test
     build:
       context: ./docker/nginx_local
     volumes:
       - static_data:/lmnad/project/static
       - media_data:/lmnad/project/media
     ports:
-      - "80:80"
+      - "8080:80"
     restart: always
     depends_on:
-      - django
-      - flower
+      - django_test
+      - flower_test
     networks:
-      - lmnad_net
+      - lmnad_net_test
 
-  celery:
+  celery_test:
     image: lmnad_base
     build:
       context: .
-    container_name: lmnad_celery
-    hostname: celery_worker
-    command: sh -c "wait-for broker:5672 && wait-for django:8000 -- celery worker -A project -l info"
+    container_name: lmnad_celery_test
+    hostname: celery_worker_test
+    command: sh -c "wait-for broker_test:5672 && wait-for django_test:8000 -- celery worker -A project -l info"
     environment:
       - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
       - DB_HOST=${DB_HOST}
@@ -77,36 +77,36 @@ services:
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
     depends_on:
-      - broker
-      - django
-      - db
+      - broker_test
+      - django_test
+      - db_test
     restart: always
     networks:
-      - lmnad_net
+      - lmnad_net_test
 
-  flower:
+  flower_test:
     image: mher/flower:0.9.4
-    container_name: lmnad_flower
-    command: flower --port=5555 --url_prefix=flower
+    container_name: lmnad_flower_test
+    command: flower --port=5556 --url_prefix=flower
     environment:
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
     ports:
-      - "5555:5555"
+      - "5556:5556"
     depends_on:
-      - broker
+      - broker_test
     restart: always
     networks:
-      - lmnad_net
+      - lmnad_net_test
 
-  broker:
+  broker_test:
     image: rabbitmq:3
-    container_name: lmnad_rabbitmq
+    container_name: lmnad_rabbitmq_test
     restart: always
     networks:
-      - lmnad_net
+      - lmnad_net_test
 
 networks:
-  lmnad_net:
+  lmnad_net_test:
 
 volumes:
   static_data:
