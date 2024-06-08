@@ -12,7 +12,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                     git 'https://github.com/esinkirill/lmnad-jenkins'
-                }
+            
             }
         }
 
