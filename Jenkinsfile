@@ -4,6 +4,8 @@ pipeline {
     environment {
         DOCKER_COMPOSE_FILE = 'docker-compose.prod.local.yml'
         ENV_FILE_PATH = '/home/esinkirill/lmnad_prod_work/.env' // путь к файлу .env на хосте
+        REMOTE_HOST = '188.120.225.17' // IP адрес или имя вашего удаленного хоста
+        REMOTE_USER = 'esinkirill' // Имя пользователя SSH на удаленном хосте
     }
 
     stages {
@@ -14,20 +16,20 @@ pipeline {
             }
         }
 
-    stage('Copy .env file') {
-        steps {
-            // Копируем файл .env с хоста внутрь контейнера Jenkins
-            sh "cp ${ENV_FILE_PATH} /var/jenkins_home/workspace/lmnad-jenkins/.env"
+        stage('Copy .env file') {
+            steps {
+                // Копируем файл .env с удаленного хоста в рабочую директорию Jenkins
+                script {
+                    sh "ssh ${REMOTE_USER}@${REMOTE_HOST} 'cat ${ENV_FILE_PATH}' > .env"
+                }
+            }
         }
-    }
-
-
 
         stage('Build and Deploy') {
             steps {
                 script {
                     // Запуск docker-compose с использованием файла .env для сборки и запуска контейнеров
-                    sh "docker-compose --env-file /var/jenkins_home/workspace/lmnad-jenkins/.env -f ${DOCKER_COMPOSE_FILE} up -d --build"
+                    sh "docker-compose --env-file .env -f ${DOCKER_COMPOSE_FILE} up -d --build"
                 }
             }
         }
