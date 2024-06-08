@@ -54,7 +54,7 @@ services:
       - static_data:/lmnad/project/static
       - media_data:/lmnad/project/media
     ports:
-      - "8080:80"
+      - "8081:80"  # Измените этот порт
     restart: always
     depends_on:
       - django_test
