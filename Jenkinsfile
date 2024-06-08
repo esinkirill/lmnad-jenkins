@@ -26,8 +26,8 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 script {
-                    // Запуск docker-compose с использованием файла .env для сборки и запуска контейнеров
-                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --build"
+                    // Launch docker-compose to rebuild containers without cache
+                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --build --no-cache"
                 }
             }
         }
