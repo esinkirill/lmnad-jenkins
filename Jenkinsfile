@@ -26,8 +26,10 @@ pipeline {
         stage('Build and Deploy') {
             steps {
                 script {
-                    // Launch docker-compose to rebuild containers without cache
-                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --build --no-cache"
+                    // Rebuild Docker containers without cache
+                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} build --no-cache"
+                    // Start containers
+                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d"
                 }
             }
         }
