@@ -9,7 +9,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Клонируем репозиторий
-                git 'https://your-repo-url.git'
+                git 'https://github.com/esinkirill/lmnad-jenkins'
             }
         }
 
