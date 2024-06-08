@@ -1,5 +1,5 @@
 pipeline {
-    agent root
+    agent any
 
     environment {
         DOCKER_COMPOSE_FILE = 'docker-compose.prod.local.yml'
@@ -20,7 +20,7 @@ pipeline {
             steps {
                 // Копируем файл .env с удаленного хоста в рабочую директорию Jenkins
                 script {
-                    sh "ssh ${REMOTE_USER}@${REMOTE_HOST} 'cat ${ENV_FILE_PATH}' > .env"
+                    sh "ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} 'cat ${ENV_FILE_PATH}' > .env"
                 }
             }
         }
