@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent root
 
     environment {
         DOCKER_COMPOSE_FILE = 'docker-compose.prod.local.yml'
