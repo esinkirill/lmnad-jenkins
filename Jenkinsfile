@@ -16,12 +16,11 @@ pipeline {
 
     stage('Copy .env file') {
         steps {
-            // Копируем файл .env с хоста в контейнер Jenkins
-            script {
-                sh "docker cp ${ENV_FILE_PATH} jenkins:/var/jenkins_home/workspace/lmnad-jenkins/.env"
-            }
+            // Копируем файл .env с хоста внутрь контейнера Jenkins
+            sh "cp ${ENV_FILE_PATH} /var/jenkins_home/workspace/lmnad-jenkins/.env"
         }
     }
+
 
 
         stage('Build and Deploy') {
