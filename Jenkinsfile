@@ -20,7 +20,7 @@ stage('Copy .env file') {
     steps {
         // Копируем файл .env с удаленного хоста в рабочую директорию проекта Jenkins
         script {
-            sh "scp ${REMOTE_USER}@${REMOTE_HOST}:${ENV_FILE_PATH} ~/lmnad-jenkins/.env"
+            sh "scp ${REMOTE_USER}@${REMOTE_HOST}:${ENV_FILE_PATH} ~/lmnad-jenkins/"
         }
     }
 }
