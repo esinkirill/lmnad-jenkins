@@ -12,7 +12,25 @@ pipeline {
             }
         }
 
-
+        stage('Copy .env file') {
+            steps {
+                script {
+                    sh 'echo "DJANGO_SECRET_KEY=prod_local" > lmnad-jenkins/.env'
+                    sh 'echo "DJANGO_SETTINGS_MODULE=project.settings.server" >> lmnad-jenkins/.env'
+                    sh 'echo "DB_HOST=db" >> lmnad-jenkins/.env'
+                    sh 'echo "DB_USER=lmnad_prod_local" >> lmnad-jenkins/.env'
+                    sh 'echo "DB_PASSWORD=12345" >> lmnad-jenkins/.env'
+                    sh 'echo "CELERY_BROKER_URL=amqp://guest:guest@broker:5672" >> lmnad-jenkins/.env'
+                    sh 'echo "CELERY_RESULT_BACKEND=rpc://" >> lmnad-jenkins/.env'
+                    sh 'echo "" >> lmnad-jenkins/.env' // Пустая строка между группами переменных
+                    sh 'echo "MYSQL_ROOT_HOST=%" >> lmnad-jenkins/.env'
+                    sh 'echo "MYSQL_ROOT_PASSWORD=78910" >> lmnad-jenkins/.env'
+                    sh 'echo "" >> lmnad-jenkins/.env' // Пустая строка между группами переменных
+                    sh 'echo "YANDEX_TRANSLATE_API_KEY=local" >> lmnad-jenkins/.env'
+                    sh 'echo "GEOPOSITION_GOOGLE_MAPS_API_KEY=local" >> lmnad-jenkins/.env'
+                }
+            }
+        }
 
         stage('Build and Deploy') {
             steps {
