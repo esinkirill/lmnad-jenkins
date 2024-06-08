@@ -31,7 +31,7 @@ services:
     container_name: lmnad_mysql_test
     image: mysql:5.7
     environment:
-      - MYSQL_DATABASE=lmnad_db_test
+      - MYSQL_DATABASE=lmnad_db
       - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_USER=${DB_USER}
