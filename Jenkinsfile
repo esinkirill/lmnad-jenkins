@@ -8,29 +8,25 @@ pipeline {
         REMOTE_USER = 'esinkirill' // Имя пользователя SSH на удаленном хосте
     }
 
-stage('Clone Repository') {
-    steps {
-        // Создаем новую директорию для клонирования репозитория
-        dir('/var/jenkins_home/workspace/') {
-            // Клонируем репозиторий в указанную директорию
-            git 'https://github.com/esinkirill/lmnad-jenkins'
+    stages {
+        stage('Clone Repository') {
+            steps {
+                // Создаем новую директорию для клонирования репозитория
+                dir('/var/jenkins_home/workspace/') {
+                    // Клонируем репозиторий в указанную директорию
+                    git 'https://github.com/esinkirill/lmnad-jenkins'
+                }
+            }
         }
-    }
-}
 
-
-stage('Copy .env file') {
-    steps {
-        script {
-            // Копируем файл .env с удаленного хоста в папку проекта lmnad-jenkins
-            sh "scp ${REMOTE_USER}@${REMOTE_HOST}:${ENV_FILE_PATH} /var/jenkins_home/workspace/lmnad-jenkins/.env"
+        stage('Copy .env file') {
+            steps {
+                script {
+                    // Копируем файл .env с удаленного хоста в папку проекта lmnad-jenkins
+                    sh "scp ${REMOTE_USER}@${REMOTE_HOST}:${ENV_FILE_PATH} /var/jenkins_home/workspace/lmnad-jenkins/.env"
+                }
+            }
         }
-    }
-}
-
-
-
-
 
         stage('Build and Deploy') {
             steps {
