@@ -11,9 +11,6 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                // Создаем новую директорию для клонирования репозитория
-                dir('/var/jenkins_home/workspace/') {
-                    // Клонируем репозиторий в указанную директорию
                     git 'https://github.com/esinkirill/lmnad-jenkins'
                 }
             }
